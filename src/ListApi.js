@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function ListApi() {
   const [guest, setGuest] = useState([]);
@@ -16,8 +16,10 @@ export default function ListApi() {
       setGuest(allGuests);
       setLoading(false);
     }
-    getFullGuestList().catch(() => console.log('fetch went wrong'));
-  }, []);
+    getFullGuestList().catch(() =>
+      console.log('fetching all guests went wrong'),
+    );
+  }, [guest]);
 
   // adding guest to array
   async function addNewGuest(e) {
@@ -28,24 +30,45 @@ export default function ListApi() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        id: `${firstName}-${lastName}`,
         firstName: firstName,
         lastName: lastName,
       }),
     });
     const createdGuest = await response.json();
     console.log(createdGuest);
+    setGuest([...guest], createdGuest);
   }
-  addNewGuest().catch(() => console.log('fetch went wrong'));
+  // addNewGuest().catch(() => console.log('adding guest went wrong'));
+
+  // deleting from array
+  async function deleteGuest(id) {
+    const response = await fetch(`${baseUrl}/guests/${id}`, {
+      method: 'DELETE',
+    });
+    const deletedGuest = await response.json();
+    const newGuestList = guest.filter((i) => {
+      return i.id !== deletedGuest.id;
+    });
+    setGuest(newGuestList);
+  }
 
   // toggles attending/not attending
-  function isAttending(id) {
-    const newGuests = [...guest];
-    const attendee = guest.find((guestList) => guestList.id === id);
-    attendee.attending = !attendee.attending;
-    setGuest(newGuests);
+  async function isAttending(id, value) {
+    const response = await fetch(`${baseUrl}/guests/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ attending: !value }),
+    });
+    const updatedGuest = await response.json();
+    const updatedGuestList = guest.filter((i) => {
+      return i.id !== updatedGuest.id;
+    });
+    setGuest([...guest], updatedGuestList);
   }
-  // console.log(guest);
+
+  // reset
 
   return loading ? (
     <h1>loading...</h1>
@@ -59,24 +82,27 @@ export default function ListApi() {
                 {guestList.firstName} {guestList.lastName}
               </li>
               <li>
-                <input
-                  aria-label={`Attending status ${guestList.firstName} ${guestList.lastName}`}
-                  type="checkbox"
-                  checked={guestList.attending}
-                  onChange={() => {
-                    isAttending(guestList.id);
-                  }}
-                />
-                {guestList.attending === true ? 'attending' : 'not attending'}
+                <label>
+                  <input
+                    aria-label={`Attending status ${guestList.firstName} ${guestList.lastName}`}
+                    type="checkbox"
+                    checked={guestList.attending}
+                    onChange={() => {
+                      isAttending(guestList.id, guestList.attending).catch(() =>
+                        console.log('adding guest went wrong'),
+                      );
+                    }}
+                  />
+                  {guestList.attending === true ? 'attending' : 'not attending'}
+                </label>
               </li>
               <button
                 aria-label={`Remove ${guestList.firstName} ${guestList.lastName}`}
                 onClick={() => {
-                  const newGuestList = guest.filter((i) => {
-                    return i.id !== guestList.id;
-                  });
-                  setGuest(newGuestList);
-                  console.log(guest);
+                  deleteGuest(guestList.id).catch(() =>
+                    console.log('adding guest went wrong'),
+                  );
+                  document.form.reset();
                 }}
               >
                 remove guest
@@ -87,7 +113,7 @@ export default function ListApi() {
       </div>
 
       <h2>New Guest:</h2>
-      <form className="input">
+      <form name="form">
         <label>
           First Name
           <input
@@ -101,6 +127,15 @@ export default function ListApi() {
           <input
             value={lastName}
             onChange={(e) => setLastName(e.currentTarget.value)}
+            // onKeyDown={(e) => {
+            //   if (e.key === 'Enter') {
+            //     e.preventDefault();
+            //     addNewGuest().catch(() =>
+            //       console.log('adding guest went wrong'),
+            //     );
+            // document.form.reset();
+            //   }
+            // }}
           />
         </label>
         <br />
