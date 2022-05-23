@@ -5,23 +5,29 @@ export default function List2() {
   const newFirstName = useRef();
   const newLastName = useRef();
 
-  useEffect(() => {
-    const storedGuests = JSON.parse(localStorage.getItem('Key'));
-    if (storedGuests) setGuest(storedGuests);
-  }, []);
+  // const baseUrl = 'http://localhost:4000';
 
-  useEffect(() => {
-    localStorage.setItem('Key', JSON.stringify(guest));
-  }, [guest]);
+  // const response = await fetch(`${baseUrl}/guests`);
+  // const allGuests = await response.json();
 
-  function addNewGuest() {
+  // TO SAVE GUESTS DURING RELOADS??? is not working
+  // useEffect(() => {
+  //   const storedGuests = JSON.parse(localStorage.getItem('Key'));
+  //   if (storedGuests) setGuest(storedGuests);
+  // }, []);
+  // useEffect(() => {
+  //   localStorage.setItem('Key', JSON.stringify(guest));
+  // }, [guest]);
+
+  function addNewGuest(e) {
+    e.preventDefault();
     const firstName = newFirstName.current.value;
     const lastName = newLastName.current.value;
     setGuest((guestList) => {
       return [
         ...guestList,
         {
-          id: `${guestList.firstName}-${guestList.lastName}`,
+          id: `${firstName}-${lastName}`,
           firstName: firstName,
           lastName: lastName,
           attending: false,
@@ -30,6 +36,13 @@ export default function List2() {
     });
     newFirstName.current.value = null;
     newLastName.current.value = null;
+  }
+
+  function isAttending(id) {
+    const newGuests = [...guest];
+    const attendee = guest.find((guestList) => guestList.id === id);
+    attendee.attending = !attendee.attending;
+    setGuest(newGuests);
   }
 
   console.log(guest);
@@ -49,6 +62,7 @@ export default function List2() {
         <br />
         <button onClick={addNewGuest}>Add new guest</button>
       </form>
+
       <div>
         {guest.map((guestList) => {
           return (
@@ -58,13 +72,29 @@ export default function List2() {
               </li>
               <li>
                 Attending:
-                <input type="checkbox" checked={guestList.attending} />
+                <input
+                  type="checkbox"
+                  checked={guestList.attending}
+                  onChange={() => {
+                    isAttending(guestList.id);
+                  }}
+                />
               </li>
+              <button
+                onClick={() => {
+                  const newGuestList = guest.filter((i) => {
+                    return i.id !== guestList.id;
+                  });
+                  setGuest(newGuestList);
+                  console.log(guest);
+                }}
+              >
+                remove
+              </button>
             </ul>
           );
         })}
       </div>
-      <button>remove</button>
     </>
   );
 }

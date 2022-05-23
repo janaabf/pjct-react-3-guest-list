@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 export default function List() {
   const [guest, setGuest] = useState([]);
@@ -22,14 +22,19 @@ export default function List() {
     newLastName.current.value = null;
   }
 
-  useEffect(() => {
-    addNewGuest();
-  }, []);
+  // useEffect(() => {
+  //   addNewGuest();
+  // }, []);
 
   return (
     <>
       <h2>New Guest:</h2>
-      <form className="input">
+      <form
+        className="input"
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+      >
         <label>
           First Name
           <input ref={newFirstName} />
@@ -37,7 +42,7 @@ export default function List() {
         <br />
         <label>
           Last Name
-          <input ref={newLastName} />
+          <input ref={newFirstName} />
         </label>
         <br />
         <button onClick={addNewGuest}>Return</button>
