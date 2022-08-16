@@ -1,3 +1,141 @@
 .App {
   text-align: center;
 }
+
+* {
+  background-color: #e3dfea;
+  color: #000000;
+  align-self: auto;
+  font-weight: bold;
+}
+
+input {
+  /* font-family: 'Fascinate', cursive; */
+  border: none;
+  background-color: white;
+  margin: 10px 20px 20px;
+  padding: 5px;
+}
+
+input:focus {
+  outline: none;
+  border-top: none;
+  border-right: none;
+  border-bottom: 3px black;
+  border-left: 3px black;
+}
+
+input[type='checkbox'] {
+  -webkit-appearance: none;
+  cursor: pointer;
+  margin: 0px 10px;
+  border-radius: 50px;
+  background-color: #f77b55;
+  height: 0.5em;
+  width: 1.5em;
+}
+
+input[type='checkbox']:checked {
+  background-color: #14959c;
+}
+
+h1 {
+  font-family: 'Fascinate', cursive;
+  color: #f77b55;
+  align-self: center;
+}
+
+h2 {
+  font-family: 'Fascinate', cursive;
+  color: #14959c;
+  margin-top: 50px;
+}
+
+.retroContainer {
+  position: relative;
+  width: 150px;
+  height: 40px;
+  display: inline-block;
+  background: black;
+  padding: 4px;
+  border-radius: 12px 3px 12px 3px;
+  margin-top: 20px;
+}
+
+.retro-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 150px;
+  height: 40px;
+  background: #fff;
+  border: 3px solid black;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #f77b55;
+}
+
+.retro-button:active {
+  transform: translate(-10px, 10px);
+}
+
+.retroContainer:active {
+  background: none;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* align-items: center; */
+  align-content: center;
+  padding: 50px;
+}
+
+.main-content {
+  margin: auto;
+}
+
+.guest-item {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  border: 3px solid black;
+  border-radius: 5px;
+  padding: 10px;
+  width: 400px;
+  margin-top: -4px;
+  margin-left: 4px;
+  padding-bottom: 25px;
+  transition: 1s;
+}
+
+.dropshadow-guests {
+  margin-top: 20px;
+  background: black;
+  padding: 4px;
+  border-radius: 12px 3px 12px 3px;
+  width: 426px;
+  height: 110px;
+}
+
+.guest-name {
+  margin: 10px;
+}
+
+.remove-button {
+  background: #fff;
+  border: 2px solid black;
+  font-size: 16px;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.no-guests {
+  margin: 50px 0px;
+}

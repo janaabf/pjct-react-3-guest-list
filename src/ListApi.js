@@ -1,3 +1,4 @@
+import './App.css';
 import React, { useEffect, useState } from 'react';
 
 export default function ListApi() {
@@ -84,78 +85,97 @@ export default function ListApi() {
   // reset
 
   return loading ? (
-    <h1>loading...</h1>
+    <h1 className="content">loading...</h1>
   ) : (
-    <div data-test-id="guest">
-      <h2>New Guest:</h2>
-      <form name="form" onSubmit={addNewGuest}>
-        <label>
-          First Name
-          <input
-            value={firstName}
-            onChange={(e) => setFirstName(e.currentTarget.value)}
-          />
-        </label>
-        <br />
-        <label>
-          Last Name
-          <input
-            value={lastName}
-            onChange={(e) => setLastName(e.currentTarget.value)}
-          />
-        </label>
-        <br />
-        <button onClick={addNewGuest}>Add new guest</button>
-      </form>
-      <div>
-        {/* check if there are guests, show list */}
-        {guest.length === 0 ? (
-          <div>please add guests to your list :)</div>
-        ) : (
+    <div className="content" data-test-id="guest">
+      <h1>Guest List</h1>
+      <div className="main-content">
+        <div>
           <div>
-            <h2>Guests:</h2>
-            {guest.map((guestList) => {
-              return (
-                <ul key={guestList.id}>
-                  <li>
-                    {guestList.firstName} {guestList.lastName}
-                  </li>
-                  <li>
-                    <label>
-                      <input
-                        aria-label={`Attending status ${guestList.firstName} ${guestList.lastName}`}
-                        type="checkbox"
-                        checked={guestList.attending}
-                        onChange={() => {
-                          changeAttendingStatus(
-                            guestList.id,
-                            guestList.attending,
-                          ).catch(() =>
-                            console.log('changing attending status went wrong'),
-                          );
-                        }}
-                      />
-                      {guestList.attending === true
-                        ? 'attending'
-                        : 'not attending'}
-                    </label>
-                  </li>
-                  <button
-                    aria-label={`Remove ${guestList.firstName} ${guestList.lastName}`}
-                    onClick={() => {
-                      deleteGuest(guestList.id).catch(() =>
-                        console.log('adding guest went wrong'),
-                      );
-                      document.form.reset();
-                    }}
-                  >
-                    remove guest
-                  </button>
-                </ul>
-              );
-            })}
+            <h2>New Guest:</h2>
+            <form name="form" onSubmit={addNewGuest}>
+              <label>
+                First Name
+                <input
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.currentTarget.value)}
+                />
+              </label>
+              <br />
+              <label>
+                Last Name
+                <input
+                  value={lastName}
+                  onChange={(e) => setLastName(e.currentTarget.value)}
+                />
+              </label>
+              <br />
+              <div className="retroContainer">
+                <button className="retro-button" onClick={addNewGuest}>
+                  ADD TO LIST
+                </button>
+              </div>
+            </form>
           </div>
-        )}
+        </div>
+        <div>
+          {guest.length === 0 ? (
+            <div className="no-guests">
+              time to add some guests to your list :)
+            </div>
+          ) : (
+            <div>
+              <h2>Guests:</h2>
+              {guest.map((guestList) => {
+                return (
+                  <div key={guestList.id} className="dropshadow-guests">
+                    <ul className="guest-item">
+                      <li>
+                        <div className="guest-name">
+                          {guestList.firstName} {guestList.lastName}
+                        </div>
+                        <label>
+                          <input
+                            aria-label={`Attending status ${guestList.firstName} ${guestList.lastName}`}
+                            type="checkbox"
+                            checked={guestList.attending}
+                            onChange={() => {
+                              changeAttendingStatus(
+                                guestList.id,
+                                guestList.attending,
+                              ).catch(() =>
+                                console.log(
+                                  'changing attending status went wrong',
+                                ),
+                              );
+                            }}
+                          />
+                          {guestList.attending === true
+                            ? 'attending'
+                            : 'not attending'}
+                        </label>
+                      </li>
+                      <li>
+                        <button
+                          className="remove-button"
+                          aria-label={`Remove ${guestList.firstName} ${guestList.lastName}`}
+                          onClick={() => {
+                            deleteGuest(guestList.id).catch(() =>
+                              console.log('adding guest went wrong'),
+                            );
+                            document.form.reset();
+                          }}
+                        >
+                          x
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
