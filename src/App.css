@@ -10,19 +10,16 @@
 }
 
 input {
-  /* font-family: 'Fascinate', cursive; */
-  border: none;
+  border-color: #000000;
   background-color: white;
   margin: 10px 20px 20px;
   padding: 5px;
+  border-radius: 5px;
 }
 
 input:focus {
   outline: none;
-  border-top: none;
-  border-right: none;
-  border-bottom: 3px black;
-  border-left: 3px black;
+  border-color: #f77b55;
 }
 
 input[type='checkbox'] {
