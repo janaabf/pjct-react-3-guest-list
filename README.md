@@ -9,7 +9,8 @@ This guest list was built with React.js using the UpLeveled [express-guest-list-
 - start the dev server: `yarn start`
 - start the api:
 
-```cd express-guest-list-api-memory-data-store
+```
+cd express-guest-list-api-memory-data-store
 yarn start
 ```
 
